@@ -1,45 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import Card, { CardVariant } from './components/Card'
-import UserList from './components/UserList'
-import { IUser } from './types/types'
-import axios from 'axios'
-import List from './components/List'
-import UserItem from './components/UserItem'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import UsersPage from './components/UsersPage'
+import TodosPage from './components/TodosPage'
+import { NavLink } from 'react-router-dom'
+import UserItemPage from './components/UserItemPage'
+import TodoItemPage from './components/TodoItemPage'
 
 const App = () => {
-  const [users, setUsers] = useState<IUser[]>([])
-
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  async function fetchUsers() {
-    try {
-      const response = await axios.get<IUser[]>(
-        'https://jsonplaceholder.typicode.com/users'
-      )
-      setUsers(response.data)
-    } catch (e) {
-      alert(e)
-    }
-  }
-  // здесь мы передаем в пропсе компонент(именно так он передается) которые нужно промапить.
-  //renderItem={(user: IUser) => <UserItem user={user} key={user.id}/>
   return (
-    <div>
-      <Card
-        onClick={(num) => console.log('click', num)}
-        variant={CardVariant.outlined}
-        width='200px'
-        height='200px'
-      >
-        <button>кнопка</button>
-      </Card>
-      <List
-        items={users}
-        renderItem={(user: IUser) => <UserItem user={user} key={user.id} />}
-      />
-    </div>
+    <BrowserRouter>
+      <div>
+        <NavLink to='/users'>Пользователи</NavLink>
+        <NavLink to='/todos'>Список дел</NavLink>
+      </div>
+      <Routes>
+        <Route path={'/users'} element={<UsersPage />} />
+        <Route path={'/todos'} element={<TodosPage />} />
+        <Route path={'/users/:id'} element={<UserItemPage />} />
+        <Route path={'/todos/:id'} element={<TodoItemPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

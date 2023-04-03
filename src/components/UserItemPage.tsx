@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect, FC } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { IUser } from '../types/types'
 
 type UserItemPageParams = {
@@ -10,6 +10,8 @@ type UserItemPageParams = {
 const UserItemPage: FC = () => {
   const [user, setUser] = useState<IUser | null>(null)
   const params = useParams<UserItemPageParams>()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchUser()
@@ -25,14 +27,12 @@ const UserItemPage: FC = () => {
       alert(e)
     }
   }
+
   return (
     <div>
-      <button>Back</button>
+      <button onClick={() => navigate(`/users`)}>Back</button>
       <h1>Страница пользователя {user?.name}</h1>
       <div>{user?.email}</div>
-      {/* <div>
-        {user?.address} {user?.address.street} {user?.address.zipcode}
-      </div> */}
       <div>
         {user?.address.city} {user?.address.street} {user?.address.zipcode}
       </div>
